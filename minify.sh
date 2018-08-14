@@ -1,4 +1,5 @@
-#!/bin/sh -eu
+#!/bin/sh
+set -eu
 
 html-minifier --remove-tag-whitespace --remove-attribute-quotes --minify-css true --collapse-boolean-attributes --collapse-inline-tag-whitespace --collapse-whitespace index.source.html > index.html
 
@@ -10,11 +11,7 @@ for quality in $(seq 0 11); do
   done
 done
 
-list=$(ls -lS *.brx | cut -d' ' -f5,9)
-max=$(echo "$list" | tail -1 | cut -d' ' -f1)
-
-list=$(echo "$list" | grep "^$max")
-file=$(echo "$list" | head -1 | cut -d' ' -f2)
+file=$(du -bs *.brx | sort -n | head -1 | cut -d$'\t' -f2)
 
 echo "--> $file"
 mv "$file" index.html.br
